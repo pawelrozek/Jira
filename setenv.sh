@@ -11,8 +11,8 @@ JVM_SUPPORT_RECOMMENDED_ARGS=""
 #
 # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
 #
-#JVM_MINIMUM_MEMORY="1024m"
-#JVM_MAXIMUM_MEMORY="2048m"
+#JVM_MINIMUM_MEMORY="384m"
+#JVM_MAXIMUM_MEMORY="768m"
 
 #
 # The following are the required arguments for JIRA.
@@ -31,12 +31,10 @@ JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.ap
 #-----------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------
-# This allows us to actually debug GC related issues by correlating timestamps
-# with other parts of the application logs.  The second option prevents the JVM
-# from suppressing stack traces if a given type of exception occurs frequently,
-# which could make it harder for support to diagnose a problem.
+# Prevents the JVM from suppressing stack traces if a given type of exception
+# occurs frequently, which could make it harder for support to diagnose a problem.
 #-----------------------------------------------------------------------------------
-JVM_EXTRA_ARGS="-XX:+PrintGCDateStamps -XX:-OmitStackTraceInFastThrow"
+JVM_EXTRA_ARGS="-XX:-OmitStackTraceInFastThrow"
 
 PRGDIR=`dirname "$0"`
 cat "${PRGDIR}"/jirabanner.txt
@@ -54,7 +52,7 @@ if [ "$JIRA_HOME" != "" ]; then
     fi
 fi
 
-JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${DISABLE_NOTIFICATIONS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${JVM_EXTRA_ARGS} ${JIRA_HOME_MINUSD}"
+JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${DISABLE_NOTIFICATIONS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${JVM_EXTRA_ARGS} ${JIRA_HOME_MINUSD} ${START_JIRA_JAVA_OPTS}"
 
 export JAVA_OPTS
 
@@ -100,3 +98,16 @@ cd $PUSHED_DIR
 echo ""
 echo "Server startup logs are located in $LOGBASEABS/logs/catalina.out"
 
+# Set the JVM arguments used to start JIRA. For a description of the options, see
+# http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
+
+#-----------------------------------------------------------------------------------
+# This allows us to actually debug GC related issues by correlating timestamps
+# with other parts of the application logs.
+#-----------------------------------------------------------------------------------
+GC_JVM_PARAMETERS=""
+GC_JVM_PARAMETERS="-XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintGCCause ${GC_JVM_PARAMETERS}"
+GC_JVM_PARAMETERS="-Xloggc:$LOGBASEABS/logs/atlassian-jira-gc-%t.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=20M ${GC_JVM_PARAMETERS}"
+
+CATALINA_OPTS="${GC_JVM_PARAMETERS} ${CATALINA_OPTS}"
+export CATALINA_OPTS
