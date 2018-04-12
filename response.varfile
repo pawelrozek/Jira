@@ -1,10 +1,9 @@
-#install4j response file for JIRA Software 7.8.2
-#Thu Apr 4 12:02:50 EDT 2018
-#Created by Pawel Rozek
+#install4j response file for JIRA Software 7.9.0
+#Thu Apr 12 16:04:59 UTC 2018
 executeLauncherAction$Boolean=true
-app.install.service$Boolean=false
+app.install.service$Boolean=true
 sys.confirmedUpdateInstallationString=false
-launch.application$Boolean=false
-existingInstallationDir=/opt/atlassian/jira
+launch.application$Boolean=true
+existingInstallationDir=/usr/local/JIRA Software
 sys.languageId=en
 sys.installationDir=/opt/atlassian/jira
