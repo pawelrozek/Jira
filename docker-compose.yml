@@ -1,5 +1,5 @@
 jira:
-  image: jira:7.9.0
+  image: jira:8.4.2
   container_name: jira
   restart: always
   volumes:

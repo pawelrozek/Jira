@@ -1,6 +1,6 @@
-Created by Pawel Rozek on April 12, 2018
+Created by Pawel Rozek on October 17, 2019
 
-Atlassian Jira 7.9.0
+Atlassian Jira 8.4.2
 
 Based on latest CentOS
 
@@ -17,6 +17,6 @@ Pre-Requesits:
       - /opt/atlassian
       - /opt/jiralogs
 1. Clone files to Directory on your local machine
-2. Build image: docker build -t "jira:7.9.0" ./
+2. Build image: docker build -t "jira:8.4.2" ./
 3. Run docker-compose up -d
 4. Go to http://localhost:8080
