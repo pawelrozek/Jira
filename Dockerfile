@@ -9,7 +9,9 @@ ADD "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-sof
 COPY ./response.varfile /installer/
 COPY ./setenv.sh /installer/
 
-RUN chmod -R 777 /installer/ \
+RUN yum -y update \
+    && yum install -y fontconfig \
+    && chmod -R 777 /installer/ \
     && cd /installer \
     && ls -la \
     && ./atlassian-jira-software-8.4.2-x64.bin -q -varfile response.varfile \
